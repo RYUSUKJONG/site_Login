@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import= "java.io.PrintWriter" %>
+<%@ page import= "bbs.BbsDAO" %>
+<%@ page import= "bbs.Bbs" %>
+<%@ page import= "java.util.ArrayList" %>
+
 
 <!DOCTYPE html>
 <html>
@@ -16,6 +20,13 @@
 		if(session.getAttribute("userID") != null){
 			userID = (String) session.getAttribute("userID");
 		}
+		
+		
+		int pageNumber = 1; //기본 페이지 숫자
+		if(request.getParameter("pageNumber") != null){
+			pageNumber = Integer.parseInt(request.getParameter("pageNumber"));  //정수형으로 변환
+		}
+		
 	%>
 
 	<nav class = "navbar navbar-default">
@@ -91,12 +102,23 @@
 			</thead>
 			
 			<tbody>
+				<%
+					BbsDAO bbsDAO = new BbsDAO();
+					ArrayList<Bbs> list = bbsDAO.getList(pageNumber);  //현재 페이지에서 가져온 list
+					for(int i=0; i<list.size();i++){
+				%>
+				
 				<tr>
-					<td>1</td>
-					<td>안녕하세요</td>
-					<td>홍길동</td>
-					<td>2021 04 15</td>
+					<td><a href="<%= list.get(i).getBbsID() %>"><%= list.get(i).getBbsTitle()%></a></td>
+					<td><%= list.get(i).getUserID() %></td>
+					<td><%= list.get(i).getBbsDate().substring(0, 11) + list.get(i).getBbsDate().substring(11, 13) + "시" + list.get(i) %></td>
 				</tr>
+					
+
+				<%	
+					}
+				%>
+
 			</tbody>
 			</table>
 			<a href="write.jsp" class="btn btn-primary pull-right">글쓰기</a>

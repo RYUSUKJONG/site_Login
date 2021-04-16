@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
 public class BbsDAO {
 	
@@ -81,6 +82,56 @@ public class BbsDAO {
 		return -1; // 데이터베이스 오류
 	}
 
+	
+	
+	public ArrayList<Bbs> getList(int pageNumber){
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1 ORDERBY bbsID DESC LIMIT 10";
+		ArrayList<Bbs> list = new ArrayList<Bbs>();
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);  // 데이터베이스 간 충돌방지
+			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);  //getNext:다음으로 작성될 번호
+			rs = pstmt.executeQuery(); //실행 결과
+			
+			while (rs.next()) {
+				Bbs bbs = new Bbs();
+				bbs.setBbsID(rs.getInt(1));
+				bbs.setBbsTitle(rs.getString(2));
+				bbs.setUserID(rs.getString(3));
+				bbs.setBbsDate(rs.getString(4));
+				bbs.setBbsContent(rs.getString(5));
+				bbs.setBbsAvailable(rs.getInt(6));
+				
+				
+				list.add(bbs);  //리스트에 해당 인스턴트를 담아 반환
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	
+	public boolean nextPage(int pageNumber) {  //10단위로 끊기는 경우 페이징 처리를 위해
+		String SQL = "SELECT * FROM BBS WHERE bbsID < ? AND bbsAvailable = 1";
+		
+		try {
+			PreparedStatement pstmt = conn.prepareStatement(SQL);  // 데이터베이스 간 충돌방지
+			pstmt.setInt(1, getNext() - (pageNumber - 1) * 10);  //getNext:다음으로 작성될 번호
+			rs = pstmt.executeQuery(); //실행 결과
+			
+			if (rs.next()) {			
+				return true;   //특정 페이지가 존재함
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
 }
 
 
