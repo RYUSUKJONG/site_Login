@@ -22,7 +22,6 @@ public class BbsDAO {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 	}
 	
 	public String getDate() {  //현재 시간을 가져오는 함수
