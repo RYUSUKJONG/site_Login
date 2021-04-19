@@ -3,16 +3,16 @@
 ### BbsDAO.java
 + mySQL 연결
 ```
-try {
-			String dbURL = "jdbc:mysql://localhost:3306/BBS?serverTimezone=UTC";
-			String dbID = "root";
-			String dbPassword = "비밀번호";
-			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
+    try {
+	String dbURL = "jdbc:mysql://localhost:3306/BBS?serverTimezone=UTC";
+	String dbID = "root";
+	String dbPassword = "비밀번호";
+	Class.forName("com.mysql.cj.jdbc.Driver");
+	conn = DriverManager.getConnection(dbURL, dbID, dbPassword);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+    } catch (Exception e) {
+	e.printStackTrace();
+    }
 ```
 
 + 시간을 가져오는 함수 getDate()
